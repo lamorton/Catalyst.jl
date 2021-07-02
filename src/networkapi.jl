@@ -259,7 +259,7 @@ Notes:
 function (==)(rn1::ReactionSystem, rn2::ReactionSystem)
     issetequal(species(rn1), species(rn2)) || return false
     issetequal(params(rn1), params(rn2)) || return false
-    isequal(ModelingToolkit.independent_variable(rn1), ModelingToolkit.independent_variable(rn2)) || return false
+    isequal(ModelingToolkit.get_iv(rn1), ModelingToolkit.get_iv(rn2)) || return false
     (numreactions(rn1) == numreactions(rn2)) || return false
 
     # the following fails for some reason, so need to use issubset
@@ -401,8 +401,8 @@ Notes:
 - Does not currently handle pins.
 """
 function Base.merge!(network1::ReactionSystem, network2::ReactionSystem)
-    isequal(ModelingToolkit.independent_variable(network1),
-            ModelingToolkit.independent_variable(network2)) || error("Reaction networks must have the same independent variable to be mergable.")
+    isequal(ModelingToolkit.get_iv(network1),
+            ModelingToolkit.get_iv(network2)) || error("Reaction networks must have the same independent variable to be mergable.")
     union!(get_states(network1), get_states(network2))
     union!(get_ps(network1), get_ps(network2))
     append!(get_eqs(network1), get_eqs(network2))

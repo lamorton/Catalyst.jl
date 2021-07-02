@@ -1,6 +1,6 @@
 ### Fetch required packages and reaction networks ###
 using DiffEqBase, Catalyst, Random, Test
-using ModelingToolkit: operation, Sym, istree, get_states, get_ps, get_eqs, get_systems
+using ModelingToolkit: operation, Sym, istree, get_states, get_ps, get_eqs, get_systems, get_iv
 
 using StableRNGs
 rng = StableRNG(12345)
@@ -8,7 +8,7 @@ rng = StableRNG(12345)
 include("test_networks.jl")
 
 function unpacksys(sys)
-    get_eqs(sys),independent_variable(sys),get_states(sys),get_ps(sys),nameof(sys),get_systems(sys)
+    get_eqs(sys),get_iv(sys),get_states(sys),get_ps(sys),nameof(sys),get_systems(sys)
 end
 
 ### Debug functions ###
@@ -311,7 +311,7 @@ rs_3 = ReactionSystem(rxs_3, t, [X1,X2,X3,X4,X5], [k1,k2,k3])
 push!(identical_networks_4, reaction_networks_weird[7] => rs_3)
 
 for networks in identical_networks_4
-    @test isequal(independent_variable(networks[1]), independent_variable(networks[2]))
+    @test isequal(get_iv(networks[1]), get_iv(networks[2]))
     @test alleq(get_states(networks[1]), get_states(networks[2]))
     @test alleq(get_ps(networks[1]), get_ps(networks[2]))
     @test ModelingToolkit.get_systems(networks[1]) == ModelingToolkit.get_systems(networks[2])
